@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: store
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  ai:
+    gigachat:
+      scope: GIGACHAT_API_PERS
+      client-id: ""
+      client-secret: ""
+      unsafe-ssl: true
+      embedding:
+        options:
+          model: Embeddings
+          dimensions: 1024
+    vectorstore:
+      pgvector:
+      index-type: HNSW
+      distance-type: COSINE_DISTANCE
+      dimensions: 1024
+      max-document-batch-size: 10000
