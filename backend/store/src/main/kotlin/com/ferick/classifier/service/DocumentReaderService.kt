@@ -1,9 +1,9 @@
 package com.ferick.classifier.service
 
-import com.ferick.classifier.model.dto.StoreRequestMeta
+import com.ferick.classifier.model.dto.StoreMeta
 import org.springframework.ai.document.Document
 import org.springframework.core.io.Resource
 
 interface DocumentReaderService {
-    fun getDocuments(resource: Resource, meta: StoreRequestMeta): List<Document>
+    fun getDocuments(resource: Resource, meta: StoreMeta): List<Document>
 }
