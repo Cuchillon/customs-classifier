@@ -1,6 +1,6 @@
 package com.ferick.classifier.common.extensions
 
-import com.ferick.classifier.model.dto.MetaParameter
+import com.ferick.classifier.model.enums.MetaParameter
 import com.ferick.classifier.model.dto.StoreMeta
 import com.ferick.classifier.model.dto.UserSearchResponseItem
 import org.springframework.ai.document.Document

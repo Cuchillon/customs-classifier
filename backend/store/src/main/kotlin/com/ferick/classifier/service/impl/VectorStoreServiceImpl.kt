@@ -1,6 +1,6 @@
 package com.ferick.classifier.service.impl
 
-import com.ferick.classifier.model.dto.MetaParameter
+import com.ferick.classifier.model.enums.MetaParameter
 import com.ferick.classifier.model.dto.UserSearchRequest
 import com.ferick.classifier.model.dto.UserSearchRequestMeta
 import com.ferick.classifier.service.VectorStoreService

@@ -1,6 +1,6 @@
 package com.ferick.classifier.service.readers
 
-import com.ferick.classifier.model.dto.FileType
+import com.ferick.classifier.model.enums.FileType
 import org.springframework.ai.document.Document
 import org.springframework.core.io.Resource
 

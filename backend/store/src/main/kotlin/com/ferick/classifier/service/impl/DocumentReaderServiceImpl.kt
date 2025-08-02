@@ -1,6 +1,6 @@
 package com.ferick.classifier.service.impl
 
-import com.ferick.classifier.model.dto.MetaParameter
+import com.ferick.classifier.model.enums.MetaParameter
 import com.ferick.classifier.model.dto.StoreMeta
 import com.ferick.classifier.service.DocumentReaderService
 import com.ferick.classifier.service.readers.FileTypeDocumentReader

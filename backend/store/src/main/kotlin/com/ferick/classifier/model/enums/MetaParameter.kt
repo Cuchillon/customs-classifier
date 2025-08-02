@@ -1,4 +1,4 @@
-package com.ferick.classifier.model.dto
+package com.ferick.classifier.model.enums
 
 enum class MetaParameter(val key: String) {
     SOURCE("source"),
