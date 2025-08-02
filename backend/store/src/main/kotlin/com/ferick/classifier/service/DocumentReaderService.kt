@@ -5,5 +5,9 @@ import org.springframework.ai.document.Document
 import org.springframework.core.io.Resource
 
 interface DocumentReaderService {
-    fun getDocuments(resource: Resource, meta: StoreMeta): List<Document>
+    fun getDocuments(
+        resource: Resource,
+        meta: StoreMeta,
+        fileName: String
+    ): List<Document>
 }

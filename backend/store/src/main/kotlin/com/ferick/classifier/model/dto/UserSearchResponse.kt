@@ -5,6 +5,7 @@ data class UserSearchResponse(
 )
 
 data class UserSearchResponseItem(
+    val code: String,
     val text: String,
     val score: Double,
     val meta: StoreMeta

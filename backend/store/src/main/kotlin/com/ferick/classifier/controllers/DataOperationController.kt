@@ -23,7 +23,7 @@ class DataOperationController(
         @RequestPart meta: StoreMeta,
         @RequestPart data: MultipartFile
     ) = dataOperationService.storeData(
-        StoreRequest(meta, data.bytes)
+        StoreRequest(meta, data.bytes, data.originalFilename)
     )
 
     @PostMapping("/search")

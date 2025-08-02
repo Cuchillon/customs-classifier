@@ -18,7 +18,8 @@ class DataOperationServiceImpl(
 
     override fun storeData(request: StoreRequest) {
         val resource = ByteArrayResource(request.data)
-        val documents = documentReaderService.getDocuments(resource, request.meta)
+        val documents = documentReaderService
+            .getDocuments(resource, request.meta, request.fileName.validate())
         vectorStoreService.storeDocuments(documents)
     }
 
@@ -26,4 +27,13 @@ class DataOperationServiceImpl(
         vectorStoreService.searchDocuments(request)
             .map { it.toSearchResponseItem() }
             .let { UserSearchResponse(it) }
+
+    companion object {
+        private fun String?.validate(): String {
+            if (this.isNullOrBlank()) {
+                throw IllegalArgumentException("File name must be present")
+            }
+            return this
+        }
+    }
 }

@@ -6,6 +6,7 @@ import com.ferick.classifier.model.dto.UserSearchResponseItem
 import org.springframework.ai.document.Document
 
 fun Document.toSearchResponseItem(): UserSearchResponseItem = UserSearchResponseItem(
+    code = this.metadata[MetaParameter.CODE.key].toString(),
     text = this.text.toString(),
     score = this.score ?: 0.0,
     meta = StoreMeta(
