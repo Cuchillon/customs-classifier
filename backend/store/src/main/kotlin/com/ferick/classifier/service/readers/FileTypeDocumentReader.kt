@@ -7,8 +7,6 @@ import org.springframework.core.io.Resource
 interface FileTypeDocumentReader {
     val fileType: FileType
 
-    fun supports(type: FileType) = type == fileType
-
     fun supports(fileName: String): Boolean = fileName.endsWith(fileType.extension)
 
     fun read(resource: Resource, fileName: String): List<Document>
