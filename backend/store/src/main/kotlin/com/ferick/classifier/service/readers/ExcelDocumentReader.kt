@@ -1,5 +1,6 @@
 package com.ferick.classifier.service.readers
 
+import com.ferick.classifier.common.extensions.getCellValue
 import com.ferick.classifier.common.extensions.getHeaders
 import com.ferick.classifier.common.extensions.toDocuments
 import com.ferick.classifier.model.documents.Specification
@@ -12,7 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.springframework.ai.document.Document
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Component
-import java.io.File
+import java.io.InputStream
 import java.util.EnumMap
 
 @Component
@@ -21,20 +22,20 @@ class ExcelDocumentReader : FileTypeDocumentReader {
     override val fileType: FileType = FileType.XLSX
 
     override fun read(resource: Resource, fileName: String): List<Document> {
-        val specification = parseExcelFile(resource.file)
+        val specification = parseExcelFile(resource.inputStream)
         return specification.toDocuments(fileName)
     }
 
-    private fun parseExcelFile(file: File): Specification {
-        val workbook = createWorkbook(file)
+    private fun parseExcelFile(inputStream: InputStream): Specification {
+        val workbook = createWorkbook(inputStream)
         val sheet = workbook.getSheetAt(0)
         val headers = getHeaders(sheet)
         return getSpecification(sheet, headers)
     }
 
-    private fun createWorkbook(file: File): XSSFWorkbook {
+    private fun createWorkbook(inputStream: InputStream): XSSFWorkbook {
         ZipSecureFile.setMinInflateRatio(MIN_INFLATE_RATIO)
-        return XSSFWorkbook(file)
+        return XSSFWorkbook(inputStream)
     }
 
     private fun getHeaders(sheet: XSSFSheet): EnumMap<SpecificationHeader, Int> {
@@ -53,8 +54,8 @@ class ExcelDocumentReader : FileTypeDocumentReader {
             val textIndex = headers[SpecificationHeader.DESCRIPTION]!!
             items.add(
                 SpecificationItem(
-                    code = row.getCell(codeIndex)?.stringCellValue ?: "",
-                    text = row.getCell(textIndex)?.stringCellValue ?: ""
+                    code = row.getCellValue(codeIndex),
+                    text = row.getCellValue(textIndex)
                 )
             )
         }

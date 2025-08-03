@@ -1,7 +1,9 @@
 package com.ferick.classifier.common.extensions
 
 import com.ferick.classifier.model.enums.SpecificationHeader
+import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.xssf.usermodel.XSSFRow
+import java.math.BigDecimal
 import java.util.EnumMap
 
 fun XSSFRow.getHeaders(): EnumMap<SpecificationHeader, Int> {
@@ -24,4 +26,19 @@ fun XSSFRow.getHeaders(): EnumMap<SpecificationHeader, Int> {
         )
     }
     return headers
+}
+
+fun XSSFRow.getCellValue(index: Int): String {
+    val cell = this.getCell(index)
+    return when (cell.cellType) {
+        CellType.NUMERIC -> {
+            BigDecimal(cell.toString()).stripTrailingZeros().toPlainString()
+        }
+        CellType.FORMULA -> {
+            cell.rawValue ?: ""
+        }
+        else -> {
+            cell.stringCellValue ?: ""
+        }
+    }
 }
