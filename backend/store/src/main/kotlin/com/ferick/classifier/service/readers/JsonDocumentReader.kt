@@ -1,9 +1,9 @@
 package com.ferick.classifier.service.readers
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.ferick.classifier.model.enums.FileType
+import com.ferick.classifier.common.extensions.toDocuments
 import com.ferick.classifier.model.documents.Specification
-import com.ferick.classifier.model.enums.MetaParameter
+import com.ferick.classifier.model.enums.FileType
 import org.springframework.ai.document.Document
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Component
@@ -18,12 +18,6 @@ class JsonDocumentReader(
     override fun read(resource: Resource, fileName: String): List<Document> {
         val specification = objectMapper
             .readValue(resource.contentAsByteArray, Specification::class.java)
-        return specification.items.map { item ->
-            Document.builder()
-                .text(item.text)
-                .metadata(MetaParameter.SOURCE.key, fileName)
-                .metadata(MetaParameter.CODE.key, item.code)
-                .build()
-        }
+        return specification.toDocuments(fileName)
     }
 }

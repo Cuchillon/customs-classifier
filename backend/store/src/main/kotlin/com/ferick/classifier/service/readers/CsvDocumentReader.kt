@@ -1,9 +1,9 @@
 package com.ferick.classifier.service.readers
 
+import com.ferick.classifier.common.extensions.toDocuments
 import com.ferick.classifier.model.documents.CsvDocument
-import com.ferick.classifier.model.enums.FileType
 import com.ferick.classifier.model.documents.Specification
-import com.ferick.classifier.model.enums.MetaParameter
+import com.ferick.classifier.model.enums.FileType
 import com.opencsv.bean.CsvToBeanBuilder
 import org.springframework.ai.document.Document
 import org.springframework.core.io.Resource
@@ -27,12 +27,6 @@ class CsvDocumentReader : FileTypeDocumentReader {
         val specification = csvToBean.parse()
             .map { it.toSpecificationItem() }
             .let { Specification(it) }
-        return specification.items.map { item ->
-            Document.builder()
-                .text(item.text)
-                .metadata(MetaParameter.SOURCE.key, fileName)
-                .metadata(MetaParameter.CODE.key, item.code)
-                .build()
-        }
+        return specification.toDocuments(fileName)
     }
 }
