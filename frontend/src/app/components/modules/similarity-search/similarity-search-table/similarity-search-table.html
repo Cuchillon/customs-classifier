@@ -3,7 +3,9 @@
     @let items = store.data().items;
 
     @if (items.length === 0) {
-      <span>Результаты поиска по данным параметрам отсутствуют</span>
+      <div class="empty-results tui-text_body-xl">
+        <span>Результаты поиска по данным параметрам отсутствуют</span>
+      </div>
     } @else {
       <table
         tuiTable
