@@ -52,6 +52,7 @@
         removingTitle: 'Удалить клиента',
         label: 'Введите клиента'
       }"
+      (changedFilters)="clientFilters.set($event)"
     />
 
     <app-elastic-filter
@@ -60,6 +61,7 @@
         removingTitle: 'Удалить спецификацию',
         label: 'Введите спецификацию'
       }"
+      (changedFilters)="specFilters.set($event)"
     />
 
     <app-button-block
@@ -69,9 +71,9 @@
     />
   </div>
 
-  @if (userSearchResponse.items.length > 0) {
+  @if (store.data().items.length > 0) {
     <app-similarity-search-table
-      [userSearchResponse]="userSearchResponse"
+      [userSearchResponse]="store.data()"
     />
   }
 </div>

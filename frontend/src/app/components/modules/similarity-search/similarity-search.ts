@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { TuiAppearance, TuiError, TuiTextfield } from '@taiga-ui/core';
 import { TuiFieldErrorPipe, TuiInputNumber, TuiTextarea } from '@taiga-ui/kit';
 import { TuiCardLarge } from '@taiga-ui/layout';
@@ -6,9 +6,9 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { AsyncPipe } from '@angular/common';
 import { SimilaritySearchTable } from './similarity-search-table/similarity-search-table';
 import { ButtonBlock } from '../../shared/button-block/button-block';
-import { ElasticFilter } from '../../shared/elastic-filter/elastic-filter';
-import { UserSearchResponse } from '../../../model/UserSearchResponse';
-import { DataOperationApiService } from '../../../services/data-operation-api.service';
+import { ChangedFilters, ElasticFilter } from '../../shared/elastic-filter/elastic-filter';
+import { SimilaritySearchStore } from '../../../state/similarity-search.store';
+import { UserSearchRequest } from '../../../model/UserSearchRequest';
 
 const DEFAULT_TOP_K = 4;
 const DEFAULT_SIMILARITY_THRESHOLD = 90;
@@ -30,23 +30,39 @@ const DEFAULT_SIMILARITY_THRESHOLD = 90;
     ButtonBlock,
     ElasticFilter
   ],
+  providers: [
+    SimilaritySearchStore
+  ],
   templateUrl: './similarity-search.html',
   styleUrl: './similarity-search.less',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SimilaritySearch {
-  private readonly dataOperationApiService = inject(DataOperationApiService);
+  protected readonly store = inject(SimilaritySearchStore);
 
   protected readonly formGroup = new FormGroup({
-    description: new FormControl<string>('', Validators.required),
-    topK: new FormControl<number>(DEFAULT_TOP_K, Validators.required),
-    similarityThreshold: new FormControl<number>(DEFAULT_SIMILARITY_THRESHOLD, Validators.required)
+    description: new FormControl<string>('', { validators: Validators.required, nonNullable: true }),
+    topK: new FormControl<number>(DEFAULT_TOP_K, { validators: Validators.required, nonNullable: true }),
+    similarityThreshold: new FormControl<number>(DEFAULT_SIMILARITY_THRESHOLD, {
+      validators: Validators.required, nonNullable: true
+    })
   });
 
+  protected clientFilters = signal<ChangedFilters>({ values: [], valid: true });
+  protected specFilters = signal<ChangedFilters>({ values: [], valid: true });
+
   protected submitForm() {
-    if (this.formGroup.valid) {
-      // TODO
-      console.log('Form submit');
+    if (this.formGroup.valid && this.clientFilters().valid && this.specFilters().valid) {
+      const request: UserSearchRequest = {
+        query: this.formGroup.controls.description.value,
+        topK: this.formGroup.controls.topK.value,
+        similarityThreshold: this.formGroup.controls.similarityThreshold.value,
+        meta: {
+          clients: this.clientFilters().values,
+          specifications: this.specFilters().values
+        }
+      };
+      this.store.loadUserSearchResponse(request);
     }
   }
 
@@ -55,36 +71,4 @@ export class SimilaritySearch {
     this.formGroup.controls.topK.setValue(DEFAULT_TOP_K);
     this.formGroup.controls.similarityThreshold.setValue(DEFAULT_SIMILARITY_THRESHOLD);
   }
-
-  protected userSearchResponse: UserSearchResponse = {
-    items: [
-      {
-        code: '8420108000',
-        text: 'Тестораскаточная машина',
-        score: 0.9704168532043695,
-        meta: {
-          client: 'Machines',
-          specification: 'equipment'
-        }
-      },
-      {
-        code: '8438809900',
-        text: 'Формовочная машина',
-        score: 0.9304168532043695,
-        meta: {
-          client: 'Machines',
-          specification: 'equipment'
-        }
-      },
-      {
-        code: '8438809900',
-        text: 'Фаршевый насос',
-        score: 0.9104168532043695,
-        meta: {
-          client: 'Machines',
-          specification: 'equipment'
-        }
-      }
-    ]
-  };
 }
