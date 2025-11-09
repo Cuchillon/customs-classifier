@@ -1,0 +1,51 @@
+<div>
+  @if (!control.value) {
+    <label tuiInputFiles>
+      <input
+        accept="{{ fileInputProperties().extension }}"
+        tuiInputFiles
+        [formControl]="control"
+      />
+      <ng-template>
+        <div>
+          {{ fileInputProperties().label }}
+        </div>
+      </ng-template>
+    </label>
+  }
+
+  <tui-files class="tui-space_top-1">
+    @if (
+      control.value | tuiFileRejected: { accept: fileInputProperties().extension } | async; as file
+    ) {
+      <tui-file
+        state="error"
+        [file]="file"
+        (remove)="removeFile()"
+      />
+    }
+
+    @if (loadedFiles$ | async; as file) {
+      <tui-file
+        [file]="file"
+        (remove)="removeFile()"
+      />
+    }
+
+    @if (failedFiles$ | async; as file) {
+      <tui-file
+        state="error"
+        [file]="file"
+        (remove)="removeFile()"
+      />
+    }
+
+    @if (loadingFiles$ | async; as file) {
+      <tui-file
+        state="loading"
+        [file]="file"
+        (remove)="removeFile()"
+      />
+    }
+  </tui-files>
+</div>

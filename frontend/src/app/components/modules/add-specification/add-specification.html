@@ -1,0 +1,35 @@
+<div class="add-specification-container tui-space_top-4">
+  <div tuiAppearance="floating" tuiCardLarge>
+    <app-file-input-field
+      [fileInputProperties]="{ label: 'Добавить файл спецификации', extension: '.xlsx' }"
+    />
+
+    <div class="request-parameters">
+      <div>
+        <tui-textfield>
+          <label tuiLabel>Клиент</label>
+          <textarea tuiTextarea [formControl]="clientControl"></textarea>
+        </tui-textfield>
+        <tui-error
+          [error]="[] | tuiFieldError | async"
+          [formControl]="clientControl"
+        />
+      </div>
+      <div>
+        <tui-textfield>
+          <label tuiLabel>Спецификация</label>
+          <textarea tuiTextarea [formControl]="specificationControl"></textarea>
+        </tui-textfield>
+        <tui-error
+          [error]="[] | tuiFieldError | async"
+          [formControl]="specificationControl"
+        />
+      </div>
+    </div>
+
+    <app-button-block
+      [titles]="{ left: 'Сохранить', right: 'Отмена' }"
+    />
+
+  </div>
+</div>

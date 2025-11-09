@@ -1,0 +1,16 @@
+<div class="tui-space_left-4 tui-space_right-4">
+  <tui-tabs-with-more class="tabs">
+    @for (tab of tabs; track $index) {
+      <a
+        *tuiItem
+        routerLinkActive="active"
+        tuiTab
+        [routerLink]="tab.url"
+      >
+        {{ tab.name }}
+      </a>
+    }
+  </tui-tabs-with-more>
+
+  <router-outlet />
+</div>
