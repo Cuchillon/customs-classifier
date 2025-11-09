@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, viewChildren } from '@angular/core';
 import { TuiAppearance, TuiError, TuiTextfield } from '@taiga-ui/core';
 import { TuiFieldErrorPipe, TuiInputNumber, TuiTextarea } from '@taiga-ui/kit';
 import { TuiCardLarge } from '@taiga-ui/layout';
@@ -51,17 +51,21 @@ export class SimilaritySearch {
   protected clientFilters = signal<ChangedFilters>({ values: [], valid: true });
   protected specFilters = signal<ChangedFilters>({ values: [], valid: true });
 
+  private filterElements = viewChildren(ElasticFilter);
+
   protected submitForm() {
     if (this.formGroup.valid && this.clientFilters().valid && this.specFilters().valid) {
       const request: UserSearchRequest = {
         query: this.formGroup.controls.description.value,
         topK: this.formGroup.controls.topK.value,
-        similarityThreshold: this.formGroup.controls.similarityThreshold.value,
-        meta: {
+        similarityThreshold: this.formGroup.controls.similarityThreshold.value / 100
+      };
+      if (this.clientFilters().values.length > 0 || this.specFilters().values.length > 0) {
+        request['meta'] = {
           clients: this.clientFilters().values,
           specifications: this.specFilters().values
         }
-      };
+      }
       this.store.loadUserSearchResponse(request);
     }
   }
@@ -70,5 +74,6 @@ export class SimilaritySearch {
     this.formGroup.controls.description.reset();
     this.formGroup.controls.topK.setValue(DEFAULT_TOP_K);
     this.formGroup.controls.similarityThreshold.setValue(DEFAULT_SIMILARITY_THRESHOLD);
+    this.filterElements().forEach(element => element.clearFilters());
   }
 }

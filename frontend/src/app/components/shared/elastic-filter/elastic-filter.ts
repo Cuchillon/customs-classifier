@@ -57,6 +57,10 @@ export class ElasticFilter implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  public clearFilters() {
+    this.controlArray.clear();
+  }
+
   protected addFilter() {
     this.controlArray.push(
       new FormControl<string>('', { validators: Validators.required, nonNullable: true })

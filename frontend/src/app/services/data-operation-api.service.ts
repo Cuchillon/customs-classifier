@@ -12,8 +12,9 @@ export class DataOperationApiService {
   private path = '/api/v1';
 
   public searchData(request: UserSearchRequest): Observable<UserSearchResponse> {
-    // return this.http.post<UserSearchResponse>(this.path, request);
-    return of(this.userSearchResponse);
+    console.log(JSON.stringify(request));
+    return this.http.post<UserSearchResponse>(`${this.path}/search`, request);
+    // return of(this.userSearchResponse);
     // return of({ items:[] });
   }
 
