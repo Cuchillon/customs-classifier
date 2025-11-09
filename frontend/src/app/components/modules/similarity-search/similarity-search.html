@@ -3,11 +3,11 @@
     <div>
       <tui-textfield>
         <label tuiLabel>Введите описание товара</label>
-        <textarea tuiTextarea [formControl]="descriptionKControl"></textarea>
+        <textarea tuiTextarea [formControl]="formGroup.controls.description"></textarea>
       </tui-textfield>
       <tui-error
         [error]="[] | tuiFieldError | async"
-        [formControl]="descriptionKControl"
+        [formControl]="formGroup.controls.description"
       />
     </div>
 
@@ -19,12 +19,12 @@
             tuiInputNumber
             [min]="1"
             [step]="1"
-            [formControl]="topKControl"
+            [formControl]="formGroup.controls.topK"
           />
         </tui-textfield>
         <tui-error
           [error]="[] | tuiFieldError | async"
-          [formControl]="topKControl"
+          [formControl]="formGroup.controls.topK"
         />
       </div>
       <div>
@@ -36,12 +36,12 @@
             [max]="100"
             [min]="0"
             [step]="1"
-            [formControl]="similarityThresholdControl"
+            [formControl]="formGroup.controls.similarityThreshold"
           />
         </tui-textfield>
         <tui-error
           [error]="[] | tuiFieldError | async"
-          [formControl]="similarityThresholdControl"
+          [formControl]="formGroup.controls.similarityThreshold"
         />
       </div>
     </div>
@@ -64,6 +64,8 @@
 
     <app-button-block
       [titles]="{ left: 'Найти', right: 'Очистить' }"
+      (leftClicked)="submitForm()"
+      (rightClicked)="clearForm()"
     />
   </div>
 

@@ -1,15 +1,15 @@
-interface StoreMeta {
+export interface StoreMeta {
   client: string;
   specification: string;
 }
 
-interface UserSearchResponseItem {
+export interface UserSearchResponseItem {
   code: string;
   text: string;
   score: number;
   meta: StoreMeta;
 }
 
-interface UserSearchResponse {
+export interface UserSearchResponse {
   items: UserSearchResponseItem[];
 }

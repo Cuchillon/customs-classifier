@@ -9,6 +9,7 @@ import {
     TuiTableThGroup,
     TuiTableTr
 } from "@taiga-ui/addon-table";
+import { UserSearchResponse } from '../../../../model/UserSearchResponse';
 
 @Component({
   selector: 'app-similarity-search-table',

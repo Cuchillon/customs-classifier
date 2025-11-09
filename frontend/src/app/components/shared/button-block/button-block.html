@@ -3,6 +3,7 @@
     appearance="primary"
     tuiButton
     type="button"
+    (click)="leftClicked.emit($event)"
   >
     {{ titles().left }}
   </button>
@@ -11,6 +12,7 @@
     appearance="accent"
     tuiButton
     type="button"
+    (click)="rightClicked.emit($event)"
   >
     {{ titles().right }}
   </button>

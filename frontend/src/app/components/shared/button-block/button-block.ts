@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { TuiButton } from '@taiga-ui/core';
 
 export type ButtonBlockTitles = {
@@ -17,4 +17,6 @@ export type ButtonBlockTitles = {
 })
 export class ButtonBlock {
   public titles = input.required<ButtonBlockTitles>();
+  protected leftClicked = output<Event>();
+  protected rightClicked = output<Event>();
 }
