@@ -10,16 +10,21 @@ import { tapResponse } from '@ngrx/operators';
 type SimilaritySearchState = {
   data: UserSearchResponse;
   isLoading: boolean;
+  isLoaded: boolean;
 };
 
 const initialState: SimilaritySearchState = {
   data: { items: [] },
-  isLoading: false
+  isLoading: false,
+  isLoaded: false
 };
 
 export const SimilaritySearchStore = signalStore(
   withState<SimilaritySearchState>(initialState),
   withMethods((store, dataOperationApiService = inject(DataOperationApiService)) => ({
+    updateLoaded(isLoaded: boolean) {
+      patchState(store, { isLoaded: isLoaded })
+    },
     loadUserSearchResponse: rxMethod<UserSearchRequest>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
@@ -28,7 +33,7 @@ export const SimilaritySearchStore = signalStore(
             tapResponse({
               next: response => patchState(store, { data: response }),
               error: console.error,
-              finalize: () => patchState(store, { isLoading: false })
+              finalize: () => patchState(store, { isLoading: false, isLoaded: true })
             })
           )
         })

@@ -1,32 +1,34 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TuiAppearance } from "@taiga-ui/core";
 import { TuiCardLarge } from "@taiga-ui/layout";
 import {
+  TuiTableDirective,
+  TuiTableTbody,
+  TuiTableTd,
+  TuiTableTh,
+  TuiTableThGroup,
+  TuiTableTr
+} from "@taiga-ui/addon-table";
+import { SimilaritySearchStore } from '../../../../state/similarity-search.store';
+import { LoadingSpinner } from '../../../shared/loading-spinner/loading-spinner';
+
+@Component({
+  selector: 'app-similarity-search-table',
+  imports: [
+    TuiAppearance,
+    TuiCardLarge,
     TuiTableDirective,
     TuiTableTbody,
     TuiTableTd,
     TuiTableTh,
     TuiTableThGroup,
-    TuiTableTr
-} from "@taiga-ui/addon-table";
-import { UserSearchResponse } from '../../../../model/UserSearchResponse';
-
-@Component({
-  selector: 'app-similarity-search-table',
-    imports: [
-        TuiAppearance,
-        TuiCardLarge,
-        TuiTableDirective,
-        TuiTableTbody,
-        TuiTableTd,
-        TuiTableTh,
-        TuiTableThGroup,
-        TuiTableTr
-    ],
+    TuiTableTr,
+    LoadingSpinner
+  ],
   templateUrl: './similarity-search-table.html',
   styleUrl: './similarity-search-table.less',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SimilaritySearchTable {
-  public userSearchResponse = input.required<UserSearchResponse>();
+  protected readonly store = inject(SimilaritySearchStore);
 }

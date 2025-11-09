@@ -71,9 +71,7 @@
     />
   </div>
 
-  @if (store.data().items.length > 0) {
-    <app-similarity-search-table
-      [userSearchResponse]="store.data()"
-    />
+  @if (store.isLoading() || store.isLoaded()) {
+    <app-similarity-search-table/>
   }
 </div>

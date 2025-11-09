@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SimilaritySearchEmpty } from './similarity-search-empty';
+import { LoadingSpinner } from './loading-spinner';
 
-describe('SimilaritySearchEmpty', () => {
-  let component: SimilaritySearchEmpty;
-  let fixture: ComponentFixture<SimilaritySearchEmpty>;
+describe('LoadingSpinner', () => {
+  let component: LoadingSpinner;
+  let fixture: ComponentFixture<LoadingSpinner>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SimilaritySearchEmpty]
+      imports: [LoadingSpinner]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SimilaritySearchEmpty);
+    fixture = TestBed.createComponent(LoadingSpinner);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
