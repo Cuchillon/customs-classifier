@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { AsyncPipe } from "@angular/common";
 import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import {
@@ -9,7 +9,9 @@ import {
   TuiInputFiles,
   TuiInputFilesDirective
 } from "@taiga-ui/kit";
-import { finalize, map, Observable, of, Subject, switchMap, timer } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
+
+export const MAX_SIZE = 1024 * 1024;
 
 export type FileInputProperties = {
   label: string;
@@ -33,42 +35,40 @@ export type FileInputProperties = {
 })
 export class FileInputField {
   public fileInputProperties = input.required<FileInputProperties>();
+  protected maxSize = signal<number>(MAX_SIZE);
 
   protected readonly control = new FormControl<TuiFileLike | null>(
     null,
     Validators.required,
   );
 
-  protected readonly failedFiles$ = new Subject<TuiFileLike | null>();
-  protected readonly loadingFiles$ = new Subject<TuiFileLike | null>();
   protected readonly loadedFiles$ = this.control.valueChanges.pipe(
     switchMap((file) => this.processFile(file)),
   );
 
-  protected removeFile(): void {
-    this.control.setValue(null);
+  protected fileChanged = output<File | null>();
+
+  private selectedFile: File | null = null;
+
+  protected onFileInputChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.selectedFile = input.files?.[0] ?? null;
   }
 
-  protected processFile(file: TuiFileLike | null): Observable<TuiFileLike | null> {
-    this.failedFiles$.next(null);
+  protected removeFile(): void {
+    this.control.setValue(null);
+    this.selectedFile = null;
+    this.fileChanged.emit(this.selectedFile);
+  }
 
-    if (this.control.invalid || !file) {
+  private processFile(file: TuiFileLike | null): Observable<TuiFileLike | null> {
+    if (this.control.invalid || !file || (file.size && file.size > this.maxSize())) {
+      this.selectedFile = null;
+      this.fileChanged.emit(this.selectedFile);
       return of(null);
     }
 
-    this.loadingFiles$.next(file);
-
-    return timer(1000).pipe(
-      map(() => {
-        if (Math.random() > 0.5) {
-          return file;
-        }
-
-        this.failedFiles$.next(file);
-
-        return null;
-      }),
-      finalize(() => this.loadingFiles$.next(null)),
-    );
+    this.fileChanged.emit(this.selectedFile);
+    return of(file);
   }
 }

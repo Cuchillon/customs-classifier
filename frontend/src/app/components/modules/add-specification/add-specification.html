@@ -2,27 +2,28 @@
   <div tuiAppearance="floating" tuiCardLarge>
     <app-file-input-field
       [fileInputProperties]="{ label: 'Добавить файл спецификации', extension: '.xlsx' }"
+      (fileChanged)="onFileChange($event)"
     />
 
     <div class="request-parameters">
       <div>
         <tui-textfield>
           <label tuiLabel>Клиент</label>
-          <textarea tuiTextarea [formControl]="clientControl"></textarea>
+          <textarea tuiTextarea [formControl]="formGroup.controls.client"></textarea>
         </tui-textfield>
         <tui-error
           [error]="[] | tuiFieldError | async"
-          [formControl]="clientControl"
+          [formControl]="formGroup.controls.client"
         />
       </div>
       <div>
         <tui-textfield>
           <label tuiLabel>Спецификация</label>
-          <textarea tuiTextarea [formControl]="specificationControl"></textarea>
+          <textarea tuiTextarea [formControl]="formGroup.controls.specification"></textarea>
         </tui-textfield>
         <tui-error
           [error]="[] | tuiFieldError | async"
-          [formControl]="specificationControl"
+          [formControl]="formGroup.controls.specification"
         />
       </div>
     </div>
