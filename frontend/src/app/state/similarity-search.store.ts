@@ -22,8 +22,8 @@ const initialState: SimilaritySearchState = {
 export const SimilaritySearchStore = signalStore(
   withState<SimilaritySearchState>(initialState),
   withMethods((store, dataOperationApiService = inject(DataOperationApiService)) => ({
-    updateLoaded(isLoaded: boolean) {
-      patchState(store, { isLoaded: isLoaded })
+    clearState() {
+      patchState(store, { ...initialState })
     },
     loadUserSearchResponse: rxMethod<UserSearchRequest>(
       pipe(

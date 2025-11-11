@@ -75,5 +75,6 @@ export class SimilaritySearch {
     this.formGroup.controls.topK.setValue(DEFAULT_TOP_K);
     this.formGroup.controls.similarityThreshold.setValue(DEFAULT_SIMILARITY_THRESHOLD);
     this.filterElements().forEach(element => element.clearFilters());
+    this.store.clearState();
   }
 }
