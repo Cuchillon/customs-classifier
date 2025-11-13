@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserSearchRequest } from '../model/UserSearchRequest';
 import { Observable, of } from 'rxjs';
 import { UserSearchResponse } from '../model/UserSearchResponse';
+import { StoreMeta } from '../model/StoreMeta';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,15 @@ export class DataOperationApiService {
     return this.http.post<UserSearchResponse>(`${this.path}/search`, request);
     // return of(this.userSearchResponse);
     // return of({ items:[] });
+  }
+
+  public storeData(meta: StoreMeta, file: File): Observable<void> {
+    const formData = new FormData();
+    formData.append('meta', new Blob([JSON.stringify(meta)], {
+      type: 'application/json'
+    }));
+    formData.append('data', file, file.name);
+    return this.http.post<void>(`${this.path}/store`, formData);
   }
 
   // Mock

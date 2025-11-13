@@ -1,7 +1,4 @@
-export interface StoreMeta {
-  client: string;
-  specification: string;
-}
+import { StoreMeta } from './StoreMeta';
 
 export interface UserSearchResponseItem {
   code: string;
