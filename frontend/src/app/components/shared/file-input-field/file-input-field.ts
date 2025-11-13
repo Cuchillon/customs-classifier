@@ -50,15 +50,15 @@ export class FileInputField {
 
   private selectedFile: File | null = null;
 
+  public removeFile(): void {
+    this.control.reset();
+    this.selectedFile = null;
+    this.fileChanged.emit(this.selectedFile);
+  }
+
   protected onFileInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.selectedFile = input.files?.[0] ?? null;
-  }
-
-  protected removeFile(): void {
-    this.control.setValue(null);
-    this.selectedFile = null;
-    this.fileChanged.emit(this.selectedFile);
   }
 
   private processFile(file: TuiFileLike | null): Observable<TuiFileLike | null> {

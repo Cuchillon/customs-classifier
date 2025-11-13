@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/core';
 import { TuiAppearance, TuiError, TuiLabel, TuiTextfieldComponent } from "@taiga-ui/core";
 import { TuiCardLarge } from "@taiga-ui/layout";
 import { TuiFieldErrorPipe, TuiTextarea } from '@taiga-ui/kit';
@@ -35,7 +35,20 @@ export class AddSpecification {
 
   private file = signal<File | null>(null);
 
+  private fileInputField = viewChild.required(FileInputField);
+
   protected onFileChange(event: File | null) {
     this.file.set(event);
+  }
+
+  protected onSave() {
+    if (this.formGroup.valid && this.file()) {
+      // TODO
+    }
+  }
+
+  protected onCancel() {
+    this.formGroup.reset();
+    this.fileInputField().removeFile();
   }
 }
