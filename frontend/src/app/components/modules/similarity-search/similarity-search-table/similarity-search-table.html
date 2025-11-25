@@ -1,0 +1,47 @@
+<div tuiAppearance="floating" tuiCardLarge>
+  <app-loading-spinner [isLoading]="store.isLoading()">
+    @let items = store.data().items;
+
+    @if (items.length === 0) {
+      <div class="empty-results tui-text_body-xl">
+        <span>Результаты поиска по данным параметрам отсутствуют</span>
+      </div>
+    } @else {
+      <table
+        tuiTable
+        class="table"
+      >
+        <thead>
+        <tr tuiThGroup>
+          <th tuiTh [resizable]="true">Код товара</th>
+          <th tuiTh [resizable]="true">Описание</th>
+          <th tuiTh [resizable]="true">Коэф.сходимости</th>
+          <th tuiTh [resizable]="true">Клиент</th>
+          <th tuiTh [resizable]="true">Спецификация</th>
+        </tr>
+        </thead>
+        <tbody tuiTbody>
+          @for (item of items; track $index) {
+            <tr tuiTr>
+              <td tuiTd>
+                {{ item.code }}
+              </td>
+              <td tuiTd>
+                {{ item.text }}
+              </td>
+              <td tuiTd>
+                {{ item.score }}
+              </td>
+              <td tuiTd>
+                {{ item.meta.client }}
+              </td>
+              <td tuiTd>
+                {{ item.meta.specification }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </app-loading-spinner>
+</div>

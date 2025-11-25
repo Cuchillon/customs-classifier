@@ -1,0 +1,77 @@
+<div class="similarity-search-container tui-space_top-4">
+  <div tuiAppearance="floating" tuiCardLarge>
+    <div>
+      <tui-textfield>
+        <label tuiLabel>Введите описание товара</label>
+        <textarea tuiTextarea [formControl]="formGroup.controls.description"></textarea>
+      </tui-textfield>
+      <tui-error
+        [error]="[] | tuiFieldError | async"
+        [formControl]="formGroup.controls.description"
+      />
+    </div>
+
+    <div class="request-parameters">
+      <div>
+        <tui-textfield>
+          <label tuiLabel>Количество записей</label>
+          <input
+            tuiInputNumber
+            [min]="1"
+            [step]="1"
+            [formControl]="formGroup.controls.topK"
+          />
+        </tui-textfield>
+        <tui-error
+          [error]="[] | tuiFieldError | async"
+          [formControl]="formGroup.controls.topK"
+        />
+      </div>
+      <div>
+        <tui-textfield>
+          <label tuiLabel>Порог сходимости</label>
+          <input
+            postfix="%"
+            tuiInputNumber
+            [max]="100"
+            [min]="0"
+            [step]="1"
+            [formControl]="formGroup.controls.similarityThreshold"
+          />
+        </tui-textfield>
+        <tui-error
+          [error]="[] | tuiFieldError | async"
+          [formControl]="formGroup.controls.similarityThreshold"
+        />
+      </div>
+    </div>
+
+    <app-elastic-filter
+      [filterProperties]="{
+        addingTitle: 'Добавить фильтр по клиенту',
+        removingTitle: 'Удалить клиента',
+        label: 'Введите клиента'
+      }"
+      (changedFilters)="clientFilters.set($event)"
+    />
+
+    <app-elastic-filter
+      [filterProperties]="{
+        addingTitle: 'Добавить фильтр по спецификации',
+        removingTitle: 'Удалить спецификацию',
+        label: 'Введите спецификацию'
+      }"
+      (changedFilters)="specFilters.set($event)"
+    />
+
+    <app-button-block
+      [titles]="{ left: 'Найти', right: 'Очистить' }"
+      (leftClicked)="submitForm()"
+      (rightClicked)="clearForm()"
+    />
+  </div>
+
+  @if (store.isLoading() || store.isLoaded()) {
+    <app-similarity-search-table/>
+  }
+</div>

@@ -1,0 +1,40 @@
+<div>
+  <tui-elastic-container class="visible">
+    <button
+      size="s"
+      tuiButton
+      type="button"
+      class="tui-space_right-2"
+      (click)="addFilter()"
+    >
+      {{ filterProperties().addingTitle }}
+    </button>
+    @for (control of controlArray.controls; track $index) {
+      <div class="filter-container tui-space_top-4">
+        <div>
+          <tui-textfield>
+            <label tuiLabel>{{ filterProperties().label }}</label>
+            <textarea tuiTextarea [formControl]="control"></textarea>
+          </tui-textfield>
+        </div>
+        <div>
+          <button
+            appearance="flat"
+            iconStart="@tui.trash"
+            size="s"
+            tuiIconButton
+            type="button"
+            class="remove"
+            (click)="removeFilter($index)"
+          >
+            {{ filterProperties().removingTitle }}
+          </button>
+        </div>
+      </div>
+      <tui-error
+        [error]="[] | tuiFieldError | async"
+        [formControl]="control"
+      />
+    }
+  </tui-elastic-container>
+</div>
