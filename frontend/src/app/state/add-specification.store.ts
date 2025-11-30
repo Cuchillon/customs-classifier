@@ -6,32 +6,49 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { StoreMeta } from '../model/StoreMeta';
+import { DialogService } from '../services/dialog.service';
 
 type AddSpecificationState = {
   result: SpecificationLoadStatus;
-  isLoading: boolean;
 };
 
 const initialState: AddSpecificationState = {
-  result: 'NOT_LOADED',
-  isLoading: false
+  result: 'NOT_LOADED'
 };
 
 export const AddSpecificationStore = signalStore(
   withState<AddSpecificationState>(initialState),
-  withMethods((store, dataOperationApiService = inject(DataOperationApiService)) => ({
+  withMethods(
+    (
+      store,
+      dataOperationApiService = inject(DataOperationApiService),
+      dialogService = inject(DialogService)
+    ) =>
+  ({
     clearState() {
       patchState(store, { ...initialState })
     },
     loadSpecification: rxMethod<{ meta: StoreMeta, file: File }>(
       pipe(
-        tap(() => patchState(store, { isLoading: true })),
+        tap(() => dialogService.showFullscreenLoader('Файл загружается...')),
         switchMap(request => {
           return dataOperationApiService.storeData(request.meta, request.file).pipe(
             tapResponse({
-              next: () => patchState(store, { result: 'SUCCESS' }),
-              error: () => patchState(store, { result: 'FAILURE' }),
-              finalize: () => patchState(store, { isLoading: false })
+              next: () => {
+                dialogService.showSuccess({
+                  label: 'Статус загрузки',
+                  content: 'Файл успешно загружен'
+                });
+                patchState(store, { result: 'SUCCESS' });
+              },
+              error: () => {
+                dialogService.showError({
+                  label: 'Статус загрузки',
+                  content: 'Загрузка файла завершилась ошибкой'
+                });
+                patchState(store, { result: 'FAILURE' });
+              },
+              finalize: () => dialogService.hideFullscreenLoader()
             })
           )
         })
