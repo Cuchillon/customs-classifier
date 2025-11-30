@@ -9,3 +9,13 @@ spring:
     init:
       mode: always
       schema-locations: classpath:schema.sql
+
+initial-users:
+  admin:
+    username: admin
+    password: ${AUTH_ADMIN_PASSWORD}
+    role: ADMIN
+  services:
+    - username: store
+      password: ${AUTH_STORE_PASSWORD}
+      role: SERVICE
