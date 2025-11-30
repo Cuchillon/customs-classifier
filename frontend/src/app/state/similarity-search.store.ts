@@ -6,6 +6,8 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { UserSearchRequest } from '../model/UserSearchRequest';
 import { tapResponse } from '@ngrx/operators';
+import { DialogService } from '../services/dialog.service';
+import { escapeHtml } from '../utils/util-html';
 
 type SimilaritySearchState = {
   data: UserSearchResponse;
@@ -21,7 +23,13 @@ const initialState: SimilaritySearchState = {
 
 export const SimilaritySearchStore = signalStore(
   withState<SimilaritySearchState>(initialState),
-  withMethods((store, dataOperationApiService = inject(DataOperationApiService)) => ({
+  withMethods(
+    (
+      store,
+      dataOperationApiService = inject(DataOperationApiService),
+      dialogService = inject(DialogService)
+    ) =>
+  ({
     clearState() {
       patchState(store, { ...initialState })
     },
@@ -31,9 +39,19 @@ export const SimilaritySearchStore = signalStore(
         switchMap(request => {
           return dataOperationApiService.searchData(request).pipe(
             tapResponse({
-              next: response => patchState(store, { data: response }),
-              error: console.error,
-              finalize: () => patchState(store, { isLoading: false, isLoaded: true })
+              next: response =>
+                patchState(store, { data: response, isLoading: false, isLoaded: true }),
+              error: (error: any) => {
+                const status = error['status'];
+                const message = error['statusText'];
+                dialogService.showError({
+                  label: 'Статус поиска',
+                  content: `Поиск завершился ошибкой<br>
+                            Статус ошибки: ${escapeHtml(String(status))}<br>
+                            Причина: ${escapeHtml(String(message))}`
+                });
+                patchState(store, { ...initialState });
+              }
             })
           )
         })
