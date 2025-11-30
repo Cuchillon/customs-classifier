@@ -1,0 +1,20 @@
+:host {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: fit-content;
+  height: fit-content;
+}
+
+.loader-wrapper {
+  width: 300px;
+  transform: scale(1);
+  text-align: center;
+  color: gray;
+}
+
+:host tui-loader {
+  transform: scale(1.5);
+  transform-origin: center;
+}
