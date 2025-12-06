@@ -11,6 +11,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.Table
 import java.time.Instant
+import java.util.UUID
 
 @Entity
 @Table(name = "api_keys")
@@ -19,6 +20,7 @@ data class ApiKey(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
+    val keyId: UUID,
     val keyHash: String,
     val username: String,
     val createdAt: Instant = Instant.now(),
@@ -29,7 +31,4 @@ data class ApiKey(
     @CollectionTable(name = "api_key_scopes", joinColumns = [JoinColumn(name = "api_key_id")])
     @Column(name = "scope")
     val scopes: MutableSet<String> = mutableSetOf()
-) {
-    @Transient
-    var rawKey: String? = null
-}
+)

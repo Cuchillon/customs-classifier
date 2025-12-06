@@ -15,6 +15,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS ix_auth_username ON authorities (username,auth
 
 CREATE TABLE IF NOT EXISTS api_keys (
     id BIGSERIAL PRIMARY KEY,
+    key_id UUID NOT NULL,
     key_hash VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL,
@@ -28,3 +29,5 @@ CREATE TABLE IF NOT EXISTS api_key_scopes (
     scope VARCHAR(255) NOT NULL,
     PRIMARY KEY (api_key_id, scope)
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS ix_api_key_key_id ON api_keys (key_id);
