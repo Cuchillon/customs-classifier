@@ -1,5 +1,6 @@
 package com.ferick.classifier.configuration.properties
 
+import com.ferick.classifier.model.dto.Role
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.bind.ConstructorBinding
 
@@ -12,5 +13,5 @@ data class InitialUsersProperties @ConstructorBinding constructor(
 data class InitialUserData @ConstructorBinding constructor(
     val username: String,
     val password: String,
-    val role: String
+    val role: Role
 )
