@@ -4,3 +4,5 @@ plugins {
 rootProject.name = "backend"
 include("store")
 include("auth")
+include("auth:api-key-common")
+findProject(":auth:api-key-common")?.name = "api-key-common"
