@@ -1,5 +1,5 @@
 FROM openjdk:17.0.2-jdk
 WORKDIR /home
-COPY build/libs/auth-0.0.1.jar app.jar
+COPY build/libs/api-key-provider-0.0.1.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]

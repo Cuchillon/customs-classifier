@@ -4,7 +4,7 @@ services:
     hostname: auth
     container_name: auth
     build:
-      context: ./auth
+      context: ./auth/api-key-provider
       dockerfile: Dockerfile
     ports:
       - "8081:8080"
