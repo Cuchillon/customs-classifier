@@ -28,8 +28,11 @@ class ApiKeyFilterAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(name = ["apiKeyAuthenticationFilter"])
-    fun apiKeyAuthenticationFilter(apiKeyService: ApiKeyService): ApiKeyAuthenticationFilter =
-        ApiKeyAuthenticationFilter(apiKeyService)
+    fun apiKeyAuthenticationFilter(
+        apiKeyProviderProperties: ApiKeyProviderProperties,
+        apiKeyService: ApiKeyService
+    ): ApiKeyAuthenticationFilter =
+        ApiKeyAuthenticationFilter(apiKeyProviderProperties, apiKeyService)
 
     @Bean
     @ConditionalOnMissingBean(name = ["apiKeySecurityFilterChain"])
