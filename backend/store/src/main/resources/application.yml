@@ -28,5 +28,8 @@ spring:
 
 api-key-provider:
   enabled: true
+  url: "http://localhost:8081/api/v1/api-key/validate"
+  username: store
+  password: ${AUTH_STORE_PASSWORD}
   scopes:
     - "store:all"

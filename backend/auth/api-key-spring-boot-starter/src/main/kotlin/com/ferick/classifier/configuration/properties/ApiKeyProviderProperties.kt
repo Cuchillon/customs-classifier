@@ -7,5 +7,7 @@ import org.springframework.boot.context.properties.bind.ConstructorBinding
 data class ApiKeyProviderProperties @ConstructorBinding constructor(
     val enabled: Boolean,
     val url: String,
+    val username: String,
+    val password: String,
     val scopes: List<String>
 )

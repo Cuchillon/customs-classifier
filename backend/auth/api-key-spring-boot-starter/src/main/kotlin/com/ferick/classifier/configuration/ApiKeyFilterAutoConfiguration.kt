@@ -9,12 +9,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.client.RestClient
 
 @Configuration
 @EnableConfigurationProperties(ApiKeyProviderProperties::class)
@@ -23,8 +26,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class ApiKeyFilterAutoConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean(name = ["apiKeyProviderClient"])
+    fun apiKeyProviderClient(apiKeyProviderProperties: ApiKeyProviderProperties): RestClient =
+        RestClient.builder()
+            .baseUrl(apiKeyProviderProperties.url)
+            .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .defaultHeaders {
+                it.setBasicAuth(apiKeyProviderProperties.username, apiKeyProviderProperties.password)
+            }
+            .build()
+
+    @Bean
     @ConditionalOnMissingBean(name = ["apiKeyService"])
-    fun apiKeyService(): ApiKeyService = ApiKeyServiceImpl()
+    fun apiKeyService(apiKeyProviderClient: RestClient): ApiKeyService =
+        ApiKeyServiceImpl(apiKeyProviderClient)
 
     @Bean
     @ConditionalOnMissingBean(name = ["apiKeyAuthenticationFilter"])

@@ -1,25 +1,25 @@
 package com.ferick.classifier.service.impl
 
-import com.ferick.classifier.model.dto.ValidKeyData
+import com.ferick.classifier.exceptions.ApiKeyProviderException
 import com.ferick.classifier.model.dto.ValidateRequest
 import com.ferick.classifier.model.dto.ValidateResponse
 import com.ferick.classifier.service.ApiKeyService
-import java.time.Instant
+import org.springframework.web.client.RestClient
 
-class ApiKeyServiceImpl : ApiKeyService {
+class ApiKeyServiceImpl(
+    private val client: RestClient
+) : ApiKeyService {
 
     override fun validateApiKey(request: ValidateRequest): ValidateResponse {
-        return if (request.apiKey == "api-key-1") {
-            ValidateResponse(
-                valid = true,
-                data = ValidKeyData(
-                    username = "user",
-                    expiresAt = Instant.now().plusSeconds(3600),
-                    scopes = setOf("store:all")
+        return client.post()
+            .body(request)
+            .retrieve()
+            .onStatus({ statusCode -> statusCode.is4xxClientError || statusCode.is5xxServerError }) { _, res ->
+                throw ApiKeyProviderException(
+                    "Getting API key failed with ${res.statusCode.value()}, ${res.statusText}"
                 )
-            )
-        } else {
-            ValidateResponse(false)
-        }
+            }
+            .body(ValidateResponse::class.java)
+            ?: throw ApiKeyProviderException("Getting API key returned empty body")
     }
 }
