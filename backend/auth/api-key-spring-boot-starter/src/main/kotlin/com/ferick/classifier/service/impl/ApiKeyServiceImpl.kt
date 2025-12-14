@@ -15,7 +15,7 @@ class ApiKeyServiceImpl : ApiKeyService {
                 data = ValidKeyData(
                     username = "user",
                     expiresAt = Instant.now().plusSeconds(3600),
-                    scopes = setOf("read:data")
+                    scopes = setOf("store:all")
                 )
             )
         } else {
