@@ -1,0 +1,2 @@
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  com.ferick.classifier.processors.ApiKeyEnvironmentPostProcessor
