@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: auth
+  datasource:
+    url: jdbc:postgresql://localhost:5433/auth
+    username: postgres
+    password: postgres
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+initial-users:
+  admin:
+    username: admin
+    password: ${AUTH_ADMIN_PASSWORD}
+    role: ADMIN
+  services:
+    - username: store
+      password: ${AUTH_STORE_PASSWORD}
+      role: SERVICE

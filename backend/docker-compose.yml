@@ -1,9 +1,47 @@
 version: '3'
 services:
+  auth:
+    hostname: auth
+    container_name: auth
+    build:
+      context: ./auth/api-key-provider
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    networks:
+      - backend
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/auth
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - AUTH_ADMIN_PASSWORD=admin
+      - AUTH_STORE_PASSWORD=store
+
   postgres:
+    hostname: postgres
+    container_name: postgres
     image: "pgvector/pgvector:pg17"
     ports:
       - "5432:5432"
+    networks:
+      - backend
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
+  postgres-auth:
+    hostname: postgres-auth
+    container_name: postgres-auth
+    image: "postgres:13"
+    ports:
+      - "5433:5432"
+    networks:
+      - backend
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=auth
+
+networks:
+  backend:
+    driver: bridge
