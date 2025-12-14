@@ -13,6 +13,7 @@ java {
 }
 
 dependencies {
+    implementation(project(":auth:api-key-common"))
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation(group = "org.springframework.boot", name = "spring-boot-starter-data-jpa")
     implementation(group = "org.springframework.boot", name = "spring-boot-starter-validation")

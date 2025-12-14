@@ -3,6 +3,7 @@ package com.ferick.classifier.service.impl
 import com.ferick.classifier.common.extensions.toResponse
 import com.ferick.classifier.model.dto.ApiKeyRequest
 import com.ferick.classifier.model.dto.ApiKeyResponse
+import com.ferick.classifier.model.dto.ValidKeyData
 import com.ferick.classifier.model.dto.ValidateRequest
 import com.ferick.classifier.model.dto.ValidateResponse
 import com.ferick.classifier.model.entities.ApiKey
@@ -30,7 +31,7 @@ class ApiKeyServiceImpl(
         val keyId = UUID.randomUUID()
         val rawKey = keyEncodingService.generateRawKey(keyId)
         val keyHash = keyEncodingService.hashKey(rawKey)
-        val expiresAt = request.ttlSeconds?.let { Instant.now().plus(Duration.ofSeconds(it)) }
+        val expiresAt = Instant.now().plus(Duration.ofSeconds(request.ttlSeconds ?: DEFAULT_TTL_SECONDS))
 
         val apiKey = ApiKey(
             keyId = keyId,
@@ -59,16 +60,24 @@ class ApiKeyServiceImpl(
 
         return if (
             apiKey.active.not()
-            || (apiKey.expiresAt != null && apiKey.expiresAt!!.isBefore(Instant.now()))
+            || (apiKey.expiresAt.isBefore(Instant.now()))
             || !keyEncodingService.matches(request.apiKey, apiKey.keyHash)
         ) {
             invalidApiKeyResponse
         } else {
-            ValidateResponse(valid = true, expiresAt = apiKey.expiresAt)
+            ValidateResponse(
+                valid = true,
+                data = ValidKeyData(
+                    username = apiKey.username,
+                    expiresAt = apiKey.expiresAt,
+                    scopes = apiKey.scopes
+                )
+            )
         }
     }
 
     companion object {
+        private const val DEFAULT_TTL_SECONDS = 86400L
         private val invalidApiKeyResponse = ValidateResponse(valid = false)
     }
 }

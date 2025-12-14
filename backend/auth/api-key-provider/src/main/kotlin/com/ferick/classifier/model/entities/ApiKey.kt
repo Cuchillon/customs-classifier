@@ -24,7 +24,7 @@ data class ApiKey(
     val keyHash: String,
     val username: String,
     val createdAt: Instant = Instant.now(),
-    val expiresAt: Instant? = null,
+    val expiresAt: Instant,
     var active: Boolean = true,
 
     @ElementCollection(fetch = FetchType.LAZY)

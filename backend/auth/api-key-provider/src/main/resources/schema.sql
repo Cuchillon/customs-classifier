@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS api_keys (
     key_hash VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL,
-    expires_at TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
     active BOOLEAN NOT NULL DEFAULT true,
     CONSTRAINT fk_api_keys_users FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
 );
