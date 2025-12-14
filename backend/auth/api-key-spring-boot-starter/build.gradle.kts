@@ -14,9 +14,11 @@ java {
 dependencies {
     implementation(project(":auth:api-key-common"))
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation(group = "org.springframework.boot", name = "spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("com.google.guava:guava:33.3.1-jre")
     compileOnly("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

@@ -1,6 +1,7 @@
 package com.ferick.classifier.filters
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.ferick.classifier.common.extensions.isExpired
 import com.ferick.classifier.common.extensions.isPermissionEnough
 import com.ferick.classifier.configuration.properties.ApiKeyProviderProperties
 import com.ferick.classifier.model.ApiKeyAuthentication
@@ -29,13 +30,14 @@ class ApiKeyAuthenticationFilter(
     ) {
         request.getHeader("X-API-Key")?.let { apiKey ->
             val validateResponse = apiKeyService.validateApiKey(ValidateRequest(apiKey))
-            if (!validateResponse.valid) {
+            if (!validateResponse.valid || validateResponse.isExpired()) {
                 sendAuthError(response, HttpServletResponse.SC_UNAUTHORIZED, "API key not valid")
                 return
             }
 
             if (!validateResponse.isPermissionEnough(apiKeyProviderProperties.scopes)) {
                 sendAuthError(response, HttpServletResponse.SC_FORBIDDEN, "Not enough permissions")
+                return
             }
 
             val authorities = validateResponse.data?.scopes?.map { SimpleGrantedAuthority(it) } ?: emptyList()
