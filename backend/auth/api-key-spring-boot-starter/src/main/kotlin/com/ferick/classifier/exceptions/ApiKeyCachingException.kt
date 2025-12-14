@@ -1,3 +1,5 @@
 package com.ferick.classifier.exceptions
 
-class ApiKeyCachingException(message: String) : RuntimeException(message)
+import org.springframework.security.core.AuthenticationException
+
+class ApiKeyCachingException(message: String) : AuthenticationException(message)

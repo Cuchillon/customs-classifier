@@ -7,7 +7,7 @@ import com.ferick.classifier.service.ApiKeyService
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.web.client.RestClient
 
-class ApiKeyServiceImpl(
+open class ApiKeyServiceImpl(
     private val client: RestClient
 ) : ApiKeyService {
 

@@ -12,6 +12,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
+import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
@@ -29,7 +30,17 @@ class ApiKeyAuthenticationFilter(
         filterChain: FilterChain
     ) {
         request.getHeader("X-API-Key")?.let { apiKey ->
-            val validateResponse = apiKeyService.validateApiKey(ValidateRequest(apiKey))
+            val validateResponse = try {
+                apiKeyService.validateApiKey(ValidateRequest(apiKey))
+            } catch (e: AuthenticationException) {
+                sendAuthError(
+                    response,
+                    HttpServletResponse.SC_UNAUTHORIZED,
+                    e.message ?: "Failed validating API key"
+                )
+                return
+            }
+
             if (!validateResponse.valid || validateResponse.isExpired()) {
                 sendAuthError(response, HttpServletResponse.SC_UNAUTHORIZED, "API key not valid")
                 return
