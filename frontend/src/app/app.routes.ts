@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
+import { loginGuard } from './guards/login-guard';
 
 export const routes: Routes = [
   {
@@ -10,7 +11,8 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('./components/modules/login/login').then(m => m.Login)
+      import('./components/modules/login/login').then(m => m.Login),
+    canActivate: [loginGuard]
   },
   {
     path: 'similarity-search',

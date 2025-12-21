@@ -12,7 +12,6 @@ import { Login } from './components/modules/login/login';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
-  private readonly authService = inject(AuthService);
+  protected readonly authService = inject(AuthService);
   protected readonly title = signal<string>('База знаний классификации товаров');
-  protected readonly isAuthenticated = signal<boolean>(this.authService.isAuthenticated());
 }

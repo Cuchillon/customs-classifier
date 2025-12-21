@@ -1,6 +1,6 @@
 <tui-root>
   <h1 class="tui-text_h4 tui-space_left-4">{{ title() }}</h1>
-  @if (isAuthenticated()) {
+  @if (authService.isAuthenticated()) {
     <app-navigation-tabs/>
   } @else {
     <app-login/>
