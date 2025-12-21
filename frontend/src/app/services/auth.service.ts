@@ -36,8 +36,7 @@ export class AuthService {
         this.router.navigate(["/"]).then(r => console.log('User authorized'));
       },
       error: error => {
-        this._isAuthenticated.set(false);
-        localStorage.clear();
+        this.clear();
         const status = error['status'];
         const message = error['statusText'];
         this.dialogService.showError({
@@ -48,6 +47,15 @@ export class AuthService {
         });
       }
     })
+  }
+
+  public logout() {
+    this.clear();
+  }
+
+  private clear() {
+    this._isAuthenticated.set(false);
+    localStorage.clear();
   }
 
   private isApiKeyStored(): boolean {
@@ -61,7 +69,7 @@ export class AuthService {
         return !!parsed.rawKey && this.isApiKeyValid(parsed.expiresAt);
       } catch (e) {
         console.log(`Failed to get auth data from local storage`);
-        localStorage.clear();
+        this.clear();
         return false;
       }
     }
@@ -73,7 +81,7 @@ export class AuthService {
 
     if (isNaN(expiresAt.getTime())) {
       console.log(`Invalid expiresAt date string: ${expireAtString}`);
-      localStorage.clear();
+      this.clear();
       return false;
     }
 

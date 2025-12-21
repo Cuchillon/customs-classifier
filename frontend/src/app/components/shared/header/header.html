@@ -1,0 +1,13 @@
+<div class="header-container">
+  <h1 class="tui-text_h4 tui-space_left-4">{{ title() }}</h1>
+  @if (authService.isAuthenticated()) {
+    <button
+      appearance="flat"
+      tuiButton
+      type="button"
+      (click)="authService.logout()"
+    >
+      Выйти
+    </button>
+  }
+</div>

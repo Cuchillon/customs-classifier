@@ -3,10 +3,11 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { NavigationTabs } from './components/modules/navigation-tabs/navigation-tabs';
 import { AuthService } from './services/auth.service';
 import { Login } from './components/modules/login/login';
+import { Header } from './components/shared/header/header';
 
 @Component({
   selector: 'app-root',
-  imports: [TuiRoot, NavigationTabs, Login],
+  imports: [TuiRoot, NavigationTabs, Login, Header],
   templateUrl: './app.html',
   styleUrl: './app.less',
   changeDetection: ChangeDetectionStrategy.OnPush
