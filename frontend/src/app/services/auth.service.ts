@@ -23,6 +23,7 @@ export class AuthService {
   public isAuthenticated = this._isAuthenticated.asReadonly();
 
   public login(username: string, password: string) {
+    this.dialogService.showFullscreenLoader('Дождитесь завершения авторизации...')
     const apiKeyRequest: ApiKeyRequest = {
       scopes: [STORE_SCOPE],
       ttlSeconds: TTL_SECONDS
@@ -45,7 +46,8 @@ export class AuthService {
                     Статус ошибки: ${escapeHtml(String(status))}<br>
                     Причина: ${escapeHtml(String(message))}`
         });
-      }
+      },
+      complete: () => this.dialogService.hideFullscreenLoader()
     })
   }
 
