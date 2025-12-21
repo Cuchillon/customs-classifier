@@ -1,14 +1,18 @@
 import { TuiRoot } from "@taiga-ui/core";
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { NavigationTabs } from './components/modules/navigation-tabs/navigation-tabs';
+import { AuthService } from './services/auth.service';
+import { Login } from './components/modules/login/login';
+import { Header } from './components/shared/header/header';
 
 @Component({
   selector: 'app-root',
-  imports: [TuiRoot, NavigationTabs],
+  imports: [TuiRoot, NavigationTabs, Login, Header],
   templateUrl: './app.html',
   styleUrl: './app.less',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
-  protected readonly title = signal('База знаний классификации товаров');
+  protected readonly authService = inject(AuthService);
+  protected readonly title = signal<string>('База знаний классификации товаров');
 }

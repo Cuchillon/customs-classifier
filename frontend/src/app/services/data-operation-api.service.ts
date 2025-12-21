@@ -13,10 +13,7 @@ export class DataOperationApiService {
   private path = '/api/v1';
 
   public searchData(request: UserSearchRequest): Observable<UserSearchResponse> {
-    console.log(JSON.stringify(request));
     return this.http.post<UserSearchResponse>(`${this.path}/search`, request);
-    // return of(this.userSearchResponse);
-    // return of({ items:[] });
   }
 
   public storeData(meta: StoreMeta, file: File): Observable<void> {
@@ -27,37 +24,4 @@ export class DataOperationApiService {
     formData.append('data', file, file.name);
     return this.http.post<void>(`${this.path}/store`, formData);
   }
-
-  // Mock
-  private userSearchResponse: UserSearchResponse = {
-    items: [
-      {
-        code: '8420108000',
-        text: 'Тестораскаточная машина',
-        score: 0.9704168532043695,
-        meta: {
-          client: 'Machines',
-          specification: 'equipment'
-        }
-      },
-      {
-        code: '8438809900',
-        text: 'Формовочная машина',
-        score: 0.9304168532043695,
-        meta: {
-          client: 'Machines',
-          specification: 'equipment'
-        }
-      },
-      {
-        code: '8438809900',
-        text: 'Фаршевый насос',
-        score: 0.9104168532043695,
-        meta: {
-          client: 'Machines',
-          specification: 'equipment'
-        }
-      }
-    ]
-  };
 }

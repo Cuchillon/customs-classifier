@@ -1,5 +1,27 @@
 version: '3'
 services:
+  store:
+    hostname: store
+    container_name: store
+    build:
+      context: ./store
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+    depends_on:
+      - postgres
+      - auth
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_AI_GIGACHAT_CLIENT_ID=${SPRING_AI_GIGACHAT_CLIENT_ID}
+      - SPRING_AI_GIGACHAT_CLIENT_SECRET=${SPRING_AI_GIGACHAT_CLIENT_SECRET}
+      - API_KEY_PROVIDER_URL=http://auth:8080/api/v1/api-key/validate
+      - API_KEY_PROVIDER_PASSWORD=store
+
   auth:
     hostname: auth
     container_name: auth
@@ -10,6 +32,8 @@ services:
       - "8081:8080"
     networks:
       - backend
+    depends_on:
+      - postgres-auth
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/auth
       - SPRING_DATASOURCE_USERNAME=postgres

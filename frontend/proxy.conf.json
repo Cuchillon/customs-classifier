@@ -1,4 +1,9 @@
 {
+  "/api/v1/api-key": {
+    "target": "http://127.0.0.1:8081",
+    "secure": false,
+    "logLevel": "debug"
+  },
   "/api/v1": {
     "target": "http://127.0.0.1:8080",
     "secure": false,

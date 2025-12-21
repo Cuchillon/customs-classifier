@@ -1,0 +1,92 @@
+import { inject, Injectable, signal } from '@angular/core';
+import { AuthApiService } from './auth-api.service';
+import { ApiKeyResponse } from '../model/ApiKeyResponse';
+import { ApiKeyRequest } from '../model/ApiKeyRequest';
+import { map } from 'rxjs';
+import { DialogService } from './dialog.service';
+import { escapeHtml } from '../utils/util-html';
+import { Router } from '@angular/router';
+
+const STORAGE_AUTH_KEY = "auth-data";
+const STORE_SCOPE = "store:all";
+const TTL_SECONDS = 86400;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthService {
+  private authApiService = inject(AuthApiService);
+  private dialogService = inject(DialogService);
+  private router = inject(Router);
+  private _isAuthenticated = signal<boolean>(!!this.getApiKey());
+
+  public isAuthenticated = this._isAuthenticated.asReadonly();
+
+  public login(username: string, password: string) {
+    this.dialogService.showFullscreenLoader('Дождитесь завершения авторизации...')
+    const apiKeyRequest: ApiKeyRequest = {
+      scopes: [STORE_SCOPE],
+      ttlSeconds: TTL_SECONDS
+    };
+    this.authApiService.getApiKey(username, password, apiKeyRequest).pipe(
+      map(response => JSON.stringify(response))
+    ).subscribe({
+      next: response => {
+        localStorage.setItem(STORAGE_AUTH_KEY, response);
+        this._isAuthenticated.set(true);
+        this.router.navigate(["/"]).then(r => console.log('User authorized'));
+      },
+      error: error => {
+        this.clear();
+        const status = error['status'];
+        const message = error['statusText'];
+        this.dialogService.showError({
+          label: 'Авторизация',
+          content: `Не удалось авторизоваться<br>
+                    Статус ошибки: ${escapeHtml(String(status))}<br>
+                    Причина: ${escapeHtml(String(message))}`
+        });
+      },
+      complete: () => this.dialogService.hideFullscreenLoader()
+    })
+  }
+
+  public logout() {
+    this.clear();
+  }
+
+  public getApiKey(): string | null {
+    const authData = localStorage.getItem(STORAGE_AUTH_KEY);
+
+    if (!authData) {
+      return null;
+    } else {
+      try {
+        const parsed = JSON.parse(authData) as ApiKeyResponse;
+        return (parsed.rawKey && this.isApiKeyValid(parsed.expiresAt)) ? parsed.rawKey : null;
+      } catch (e) {
+        console.log(`Failed to get auth data from local storage`);
+        this.clear();
+        return null;
+      }
+    }
+  }
+
+  private clear() {
+    this._isAuthenticated.set(false);
+    localStorage.clear();
+  }
+
+  private isApiKeyValid(expireAtString: string): boolean {
+    const expiresAt = new Date(expireAtString);
+    const now = new Date();
+
+    if (isNaN(expiresAt.getTime())) {
+      console.log(`Invalid expiresAt date string: ${expireAtString}`);
+      this.clear();
+      return false;
+    }
+
+    return expiresAt > now;
+  }
+}

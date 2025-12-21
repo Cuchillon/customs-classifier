@@ -1,0 +1,42 @@
+<div class="login-container tui-space_top-4">
+  <div tuiAppearance="floating" tuiCardLarge>
+    <div class="login-parameters">
+      <div>
+        <tui-textfield>
+          <label tuiLabel>Логин</label>
+          <input
+            tuiTextfield
+            [formControl]="formGroup.controls.login"
+          />
+        </tui-textfield>
+        <tui-error
+          [error]="[] | tuiFieldError | async"
+          [formControl]="formGroup.controls.login"
+        />
+      </div>
+      <div>
+        <tui-textfield>
+          <label tuiLabel>Пароль</label>
+          <input
+            tuiTextfield
+            [formControl]="formGroup.controls.password"
+            type="password"
+          />
+          <tui-icon tuiPassword />
+        </tui-textfield>
+        <tui-error
+          [error]="[] | tuiFieldError | async"
+          [formControl]="formGroup.controls.password"
+        />
+      </div>
+      <button
+        appearance="primary"
+        tuiButton
+        type="button"
+        (click)="login()"
+      >
+        Войти
+      </button>
+    </div>
+  </div>
+</div>
