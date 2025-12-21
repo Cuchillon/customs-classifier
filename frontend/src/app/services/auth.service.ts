@@ -18,7 +18,7 @@ export class AuthService {
   private authApiService = inject(AuthApiService);
   private dialogService = inject(DialogService);
   private router = inject(Router);
-  private _isAuthenticated = signal<boolean>(this.isApiKeyStored());
+  private _isAuthenticated = signal<boolean>(!!this.getApiKey());
 
   public isAuthenticated = this._isAuthenticated.asReadonly();
 
@@ -53,26 +53,26 @@ export class AuthService {
     this.clear();
   }
 
-  private clear() {
-    this._isAuthenticated.set(false);
-    localStorage.clear();
-  }
-
-  private isApiKeyStored(): boolean {
+  public getApiKey(): string | null {
     const authData = localStorage.getItem(STORAGE_AUTH_KEY);
 
     if (!authData) {
-      return false;
+      return null;
     } else {
       try {
         const parsed = JSON.parse(authData) as ApiKeyResponse;
-        return !!parsed.rawKey && this.isApiKeyValid(parsed.expiresAt);
+        return (parsed.rawKey && this.isApiKeyValid(parsed.expiresAt)) ? parsed.rawKey : null;
       } catch (e) {
         console.log(`Failed to get auth data from local storage`);
         this.clear();
-        return false;
+        return null;
       }
     }
+  }
+
+  private clear() {
+    this._isAuthenticated.set(false);
+    localStorage.clear();
   }
 
   private isApiKeyValid(expireAtString: string): boolean {
