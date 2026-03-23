@@ -26,5 +26,5 @@ class ClassificationTask(
 )
 
 enum class ClassificationTaskStatus {
-    STARTED, COMPLETED, DONE, PRINT_ERROR
+    STARTED, COMPLETED, DONE, ERROR
 }

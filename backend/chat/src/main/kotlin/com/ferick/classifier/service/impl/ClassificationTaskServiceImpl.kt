@@ -2,7 +2,7 @@ package com.ferick.classifier.service.impl
 
 import com.ferick.classifier.model.dto.ClassificationTaskCreateRequest
 import com.ferick.classifier.model.dto.ClassificationTaskCreateResponse
-import com.ferick.classifier.model.entity.ClassificationDescription
+import com.ferick.classifier.model.entity.ClassificationData
 import com.ferick.classifier.model.entity.ClassificationSubtask
 import com.ferick.classifier.model.entity.ClassificationTask
 import com.ferick.classifier.repository.ClassificationSubtaskRepository
@@ -33,7 +33,7 @@ class ClassificationTaskServiceImpl(
             rows.chunked(10) { batch ->
                 ClassificationSubtask(
                     classificationTask = task,
-                    descriptions = batch.map { ClassificationDescription(text = it) }
+                    data = batch.map { ClassificationData(text = it) }
                 )
             }
         )

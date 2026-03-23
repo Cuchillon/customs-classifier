@@ -29,3 +29,6 @@ api-key-provider:
   password: ${AUTH_STORE_PASSWORD}
   scopes:
     - "store:all"
+
+scheduler-thread-pool:
+  thread-number: 3

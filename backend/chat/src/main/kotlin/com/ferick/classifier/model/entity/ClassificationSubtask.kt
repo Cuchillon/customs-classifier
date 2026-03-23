@@ -36,7 +36,7 @@ class ClassificationSubtask(
         orphanRemoval = true,
         fetch = FetchType.LAZY
     )
-    val descriptions: List<ClassificationDescription>,
+    val data: List<ClassificationData>,
 
     @JdbcTypeCode(SqlTypes.JSON)
     var context: UserSearchResponse? = null

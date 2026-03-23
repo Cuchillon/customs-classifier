@@ -22,6 +22,7 @@ dependencies {
     implementation("chat.giga:spring-ai-starter-model-gigachat:1.0.1")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.apache.poi:poi-ooxml:5.4.1")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

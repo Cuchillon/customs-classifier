@@ -19,7 +19,7 @@ class ContextLoadHandler(
     @Transactional
     override fun process(subtask: ClassificationSubtask) {
         val request = UserSearchBatchRequest(
-            queries = subtask.descriptions.map { it.text },
+            queries = subtask.data.map { it.text },
             topK = subtask.classificationTask.meta.topK,
             similarityThreshold = subtask.classificationTask.meta.similarityThreshold,
             meta = subtask.classificationTask.meta.meta

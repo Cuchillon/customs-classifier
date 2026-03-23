@@ -7,11 +7,12 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "classification_descriptions")
-class ClassificationDescription(
+@Table(name = "classification_data")
+class ClassificationData(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    val text: String
+    val text: String,
+    var code: String? = null
 )
