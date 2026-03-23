@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: chat
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+  ai:
+    gigachat:
+      scope: GIGACHAT_API_PERS
+      client-id: ""
+      client-secret: ""
+      unsafe-ssl: true
+      chat:
+        options:
+          model: GigaChat
+          temperature: 0.5
+          top-p: 0.5
+          max-tokens: 2048
+
+api-key-provider:
+  enabled: true
+  url: "http://localhost:8081/api/v1/api-key/validate"
+  username: store
+  password: ${AUTH_STORE_PASSWORD}
+  scopes:
+    - "store:all"

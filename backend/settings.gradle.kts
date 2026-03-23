@@ -10,3 +10,5 @@ include("auth:api-key-provider")
 findProject(":auth:api-key-provider")?.name = "api-key-provider"
 include("auth:api-key-spring-boot-starter")
 findProject(":auth:api-key-spring-boot-starter")?.name = "api-key-spring-boot-starter"
+include("chat")
+include("common")
