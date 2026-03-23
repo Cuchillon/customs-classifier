@@ -1,5 +1,6 @@
 package com.ferick.classifier.model.entity
 
+import com.ferick.classifier.model.dto.UserSearchResponse
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -12,6 +13,8 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 
 @Entity
 @Table(name = "classification_subtasks")
@@ -33,9 +36,12 @@ class ClassificationSubtask(
         orphanRemoval = true,
         fetch = FetchType.LAZY
     )
-    val descriptions: List<ClassificationDescription>
+    val descriptions: List<ClassificationDescription>,
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    var context: UserSearchResponse? = null
 )
 
 enum class ClassificationSubtaskStatus {
-    STARTED, CONTEXT_LOADED, CHAT_CALLED, DONE
+    STARTED, CONTEXT_LOADED, CHAT_CALLED, DONE, ERROR
 }
