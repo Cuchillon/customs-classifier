@@ -8,12 +8,12 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 @Component
 class StoreClient(
-    private val restClient: RestClient
+    private val storeRestClient: RestClient
 ) {
 
     fun loadContext(request: UserSearchBatchRequest): UserSearchResponse =
         try {
-            restClient.post()
+            storeRestClient.post()
                 .uri("/search/batch")
                 .body(request)
                 .retrieve()
