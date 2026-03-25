@@ -23,12 +23,16 @@ class PrintHandler(
     override fun process(task: ClassificationTask) {
         task.id?.also {
             val subtasks = classificationSubtaskRepository.findByClassificationTaskId(it)
-            excelDocumentPrinter.print(subtasks.toResult())
-            subtasks.forEach { subtask ->
-                subtask.status = ClassificationSubtaskStatus.DONE
+            try {
+                excelDocumentPrinter.print(subtasks.toResult())
+                subtasks.forEach { subtask ->
+                    subtask.status = ClassificationSubtaskStatus.DONE
+                }
+                task.status = ClassificationTaskStatus.DONE
+                classificationSubtaskRepository.saveAll(subtasks)
+            } catch (e: Exception) {
+                task.status = ClassificationTaskStatus.ERROR
             }
-            task.status = ClassificationTaskStatus.DONE
-            classificationSubtaskRepository.saveAll(subtasks)
             classificationTaskRepository.save(task)
         }
     }
