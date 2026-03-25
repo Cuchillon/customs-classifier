@@ -9,6 +9,8 @@ import com.ferick.classifier.repository.ClassificationTaskRepository
 import com.ferick.classifier.service.documents.ExcelDocumentPrinter
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import java.nio.file.Files
+import java.nio.file.Paths
 
 @Component
 class PrintHandler(
@@ -24,7 +26,8 @@ class PrintHandler(
         task.id?.also {
             val subtasks = classificationSubtaskRepository.findByClassificationTaskId(it)
             try {
-                excelDocumentPrinter.print(subtasks.toResult())
+                val content = excelDocumentPrinter.print(subtasks.toResult())
+                storeFile(content)
                 subtasks.forEach { subtask ->
                     subtask.status = ClassificationSubtaskStatus.DONE
                 }
@@ -35,5 +38,10 @@ class PrintHandler(
             }
             classificationTaskRepository.save(task)
         }
+    }
+
+    // Временное решение
+    private fun storeFile(content: ByteArray) {
+        Files.write(Paths.get("result-file.xlsx"), content)
     }
 }
