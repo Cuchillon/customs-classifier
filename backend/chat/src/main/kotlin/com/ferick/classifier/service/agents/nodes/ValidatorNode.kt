@@ -18,7 +18,7 @@ class ValidatorNode(
 
         return if (validationResult.isSuccess) {
             mutableMapOf(
-                ClassificationAgentState.NEXT_AGENT to "end",
+                ClassificationAgentState.NEXT_AGENT to ClassificationAgentState.END,
                 ClassificationAgentState.OUTPUT to validationResult.result!!,
                 ClassificationAgentState.VALIDATION_COUNT to 0,
                 ClassificationAgentState.VALIDATION_ERROR to ""
@@ -32,7 +32,7 @@ class ValidatorNode(
                 )
             } else {
                 mutableMapOf(
-                    ClassificationAgentState.NEXT_AGENT to "end",
+                    ClassificationAgentState.NEXT_AGENT to ClassificationAgentState.END,
                     ClassificationAgentState.OUTPUT to AgentResult(emptyList()),
                     ClassificationAgentState.VALIDATION_COUNT to 0
                 )

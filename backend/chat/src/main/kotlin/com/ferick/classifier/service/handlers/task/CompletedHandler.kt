@@ -1,6 +1,7 @@
 package com.ferick.classifier.service.handlers.task
 
-import com.ferick.classifier.model.entity.ClassificationSubtaskStatus
+import com.ferick.classifier.model.entity.ClassificationSubtaskStatus.CHAT_CALLED
+import com.ferick.classifier.model.entity.ClassificationSubtaskStatus.ERROR
 import com.ferick.classifier.model.entity.ClassificationTask
 import com.ferick.classifier.model.entity.ClassificationTaskStatus
 import com.ferick.classifier.repository.ClassificationSubtaskRepository
@@ -20,14 +21,18 @@ class CompletedHandler(
     override fun process(task: ClassificationTask) {
         task.id?.also {
             val allSubtaskCount = classificationSubtaskRepository.countByClassificationTaskId(it)
-            val calledSubtaskCount = classificationSubtaskRepository
-                .countByClassificationTaskIdAndStatus(it, ClassificationSubtaskStatus.CHAT_CALLED)
-            if (calledSubtaskCount < allSubtaskCount) {
+            val completedSubtaskCount = classificationSubtaskRepository
+                .countByClassificationTaskIdAndStatusIn(it, statuses)
+            if (completedSubtaskCount < allSubtaskCount) {
                 task.status = ClassificationTaskStatus.STARTED
             } else {
                 task.status = ClassificationTaskStatus.COMPLETED
             }
             classificationTaskRepository.save(task)
         }
+    }
+
+    companion object {
+        private val statuses = setOf(CHAT_CALLED, ERROR)
     }
 }

@@ -1,6 +1,7 @@
 package com.ferick.classifier.service.agents.states
 
 import com.ferick.classifier.model.dto.AgentResult
+import com.ferick.classifier.service.agents.nodes.AgentNode
 import org.bsc.langgraph4j.state.AgentState
 import org.bsc.langgraph4j.state.Channel
 import org.bsc.langgraph4j.state.Channels
@@ -15,6 +16,10 @@ class ClassificationAgentState(initData: Map<String, Any>) : AgentState(initData
         return this.value<String>(CONTEXT).orElse("")
     }
 
+    fun nextAgent(): String {
+        return this.value<String>(NEXT_AGENT).orElse(AgentNode.CLASSIFIER.key)
+    }
+
     fun classificationResult(): String {
         return this.value<String>(CLASSIFICATION_RESULT).orElse("")
     }
@@ -27,8 +32,8 @@ class ClassificationAgentState(initData: Map<String, Any>) : AgentState(initData
         return this.value<String>(VALIDATION_ERROR).orElse("")
     }
 
-    fun output(): AgentResult? {
-        return this.value<AgentResult>(OUTPUT).orElse(null)
+    fun output(): AgentResult {
+        return this.value<AgentResult>(OUTPUT).orElseThrow { IllegalStateException("Agent output not found") }
     }
 
     companion object {
@@ -39,6 +44,7 @@ class ClassificationAgentState(initData: Map<String, Any>) : AgentState(initData
         const val VALIDATION_COUNT = "validation_count"
         const val VALIDATION_ERROR = "validation_error"
         const val OUTPUT = "output"
+        const val END = "end"
 
         val SCHEMA: Map<String, Channel<*>> = mapOf(
             INPUT to Channels.base<String>(null, null),

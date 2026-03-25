@@ -11,5 +11,8 @@ interface ClassificationSubtaskRepository : JpaRepository<ClassificationSubtask,
         statuses: Set<ClassificationSubtaskStatus>
     ): ClassificationSubtask?
     fun countByClassificationTaskId(classificationTaskId: Long): Long
-    fun countByClassificationTaskIdAndStatus(classificationTaskId: Long, status: ClassificationSubtaskStatus): Long
+    fun countByClassificationTaskIdAndStatusIn(
+        classificationTaskId: Long,
+        statuses: Set<ClassificationSubtaskStatus>
+    ): Long
 }

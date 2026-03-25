@@ -10,3 +10,6 @@ fun List<ClassificationSubtask>.toResult(): ClassificationResult =
     }.let { items ->
         ClassificationResult(items)
     }
+
+fun ClassificationSubtask.toQuery(): String =
+    this.data.joinToString(separator = "\n") { it.text }
