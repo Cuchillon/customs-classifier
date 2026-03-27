@@ -1,7 +1,9 @@
 package com.ferick.classifier.service.impl
 
+import com.ferick.classifier.common.extensions.toSearchRequests
 import com.ferick.classifier.common.extensions.toSearchResponseItem
 import com.ferick.classifier.model.dto.StoreRequest
+import com.ferick.classifier.model.dto.UserSearchBatchRequest
 import com.ferick.classifier.model.dto.UserSearchRequest
 import com.ferick.classifier.model.dto.UserSearchResponse
 import com.ferick.classifier.service.DataOperationService
@@ -27,6 +29,11 @@ class DataOperationServiceImpl(
         vectorStoreService.searchDocuments(request)
             .map { it.toSearchResponseItem() }
             .let { UserSearchResponse(it) }
+
+    override fun batchSearchData(request: UserSearchBatchRequest): UserSearchResponse =
+        request.toSearchRequests().flatMap { searchRequest ->
+            vectorStoreService.searchDocuments(searchRequest).map { it.toSearchResponseItem() }
+        }.let { UserSearchResponse(it) }
 
     companion object {
         private fun String?.validate(): String {

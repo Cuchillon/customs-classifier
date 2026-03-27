@@ -2,6 +2,7 @@ package com.ferick.classifier.controllers
 
 import com.ferick.classifier.model.dto.StoreMeta
 import com.ferick.classifier.model.dto.StoreRequest
+import com.ferick.classifier.model.dto.UserSearchBatchRequest
 import com.ferick.classifier.model.dto.UserSearchRequest
 import com.ferick.classifier.service.DataOperationService
 import org.springframework.http.MediaType
@@ -29,4 +30,8 @@ class DataOperationController(
     @PostMapping("/search")
     fun searchData(@RequestBody request: UserSearchRequest) =
         dataOperationService.searchData(request)
+
+    @PostMapping("/search/batch")
+    fun batchSearchData(@RequestBody request: UserSearchBatchRequest) =
+        dataOperationService.batchSearchData(request)
 }
