@@ -31,12 +31,12 @@ class ClassificationSubtask(
     val classificationTask: ClassificationTask,
 
     @OneToMany(
-        mappedBy = "classification_subtask",
+        mappedBy = "classificationSubtask",
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
-        fetch = FetchType.LAZY
+        fetch = FetchType.EAGER
     )
-    val data: List<ClassificationData>,
+    val data: MutableList<ClassificationData> = mutableListOf(),
 
     @JdbcTypeCode(SqlTypes.JSON)
     var context: UserSearchResponse? = null

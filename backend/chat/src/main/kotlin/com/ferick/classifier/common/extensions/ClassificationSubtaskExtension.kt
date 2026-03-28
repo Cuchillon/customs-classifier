@@ -12,4 +12,4 @@ fun List<ClassificationSubtask>.toResult(): ClassificationResult =
     }
 
 fun ClassificationSubtask.toQuery(): String =
-    this.data.joinToString(separator = "\n") { it.text }
+    this.data.joinToString(separator = "\n") { "id ${it.id} - ${it.text}" }

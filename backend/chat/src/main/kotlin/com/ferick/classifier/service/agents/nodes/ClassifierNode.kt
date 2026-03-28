@@ -4,7 +4,6 @@ import com.ferick.classifier.configuration.properties.ChatProperties
 import com.ferick.classifier.service.agents.states.ClassificationAgentState
 import org.bsc.langgraph4j.action.NodeAction
 import org.springframework.ai.chat.client.ChatClient
-import org.springframework.ai.chat.prompt.PromptTemplate
 import org.springframework.stereotype.Component
 
 @Component
@@ -36,15 +35,10 @@ class ClassifierNode(
             input
         }
 
-        val prompt = PromptTemplate.builder()
-            .template(chatProperties.prompt)
-            .variables(
-                mapOf(
-                    "context" to context,
-                    "description" to description
-                )
-            )
-            .build().create()
+        val prompt = chatProperties.prompt
+            .replace("{context}", context)
+            .replace("{description}", description)
+
         val result = chatClient
             .prompt(prompt)
             .call()

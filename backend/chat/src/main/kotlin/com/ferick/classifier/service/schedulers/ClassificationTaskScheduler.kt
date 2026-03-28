@@ -18,7 +18,7 @@ class ClassificationTaskScheduler(
 
     @Scheduled(cron = "*/30 * * * * *")
     fun process() = runBlocking(schedulerDispatcher) {
-        classificationTaskRepository.find5ByStatusIn(statuses).forEach { task ->
+        classificationTaskRepository.findFirst5ByStatusIn(statuses).forEach { task ->
             handlers.find { it.supports(task.status) }?.process(task)
                 ?: throw IllegalStateException(
                     "There is no handler for classification task status ${task.status.name}"

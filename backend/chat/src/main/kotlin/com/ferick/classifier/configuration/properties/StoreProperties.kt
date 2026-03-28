@@ -5,5 +5,6 @@ import org.springframework.boot.context.properties.bind.ConstructorBinding
 
 @ConfigurationProperties("store")
 data class StoreProperties @ConstructorBinding constructor(
-    val url: String
+    val url: String,
+    val apiKey: String
 )

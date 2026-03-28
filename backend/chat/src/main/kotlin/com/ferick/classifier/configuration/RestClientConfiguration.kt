@@ -13,6 +13,8 @@ class RestClientConfiguration(
 ) {
 
     @Bean
-    fun storeRestClient(): RestClient =
-        RestClient.create(storeProperties.url)
+    fun storeRestClient(builder: RestClient.Builder): RestClient = builder
+        .baseUrl(storeProperties.url)
+        .defaultHeader("X-API-Key", storeProperties.apiKey)
+        .build()
 }

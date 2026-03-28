@@ -31,10 +31,16 @@ class ClassificationTaskServiceImpl(
 
         classificationSubtaskRepository.saveAll(
             rows.chunked(10) { batch ->
-                ClassificationSubtask(
-                    classificationTask = task,
-                    data = batch.map { ClassificationData(text = it) }
+                val subtask = ClassificationSubtask(
+                    classificationTask = task
                 )
+                batch.forEach {
+                    subtask.data.add(
+                        ClassificationData(text = it, classificationSubtask = subtask)
+                    )
+                }
+
+                return@chunked subtask
             }
         )
 
