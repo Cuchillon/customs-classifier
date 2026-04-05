@@ -6,17 +6,17 @@ import com.ferick.classifier.model.entity.ClassificationTask
 import com.ferick.classifier.model.entity.ClassificationTaskStatus
 import com.ferick.classifier.repository.ClassificationSubtaskRepository
 import com.ferick.classifier.repository.ClassificationTaskRepository
+import com.ferick.classifier.service.FileStorageService
 import com.ferick.classifier.service.documents.ExcelDocumentPrinter
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import java.nio.file.Files
-import java.nio.file.Paths
 
 @Component
 class PrintHandler(
     private val classificationTaskRepository: ClassificationTaskRepository,
     private val classificationSubtaskRepository: ClassificationSubtaskRepository,
-    private val excelDocumentPrinter: ExcelDocumentPrinter
+    private val excelDocumentPrinter: ExcelDocumentPrinter,
+    private val fileStorageService: FileStorageService
 ) : ClassificationTaskHandler {
     override val startStatus = ClassificationTaskStatus.COMPLETED
     override val endStatus = ClassificationTaskStatus.DONE
@@ -27,10 +27,11 @@ class PrintHandler(
             val subtasks = classificationSubtaskRepository.findByClassificationTaskId(it)
             try {
                 val content = excelDocumentPrinter.print(subtasks.toResult())
-                storeFile(content)
+                val storageFileId = storeFile(task, content)
                 subtasks.forEach { subtask ->
                     subtask.status = ClassificationSubtaskStatus.DONE
                 }
+                task.storageFileId = storageFileId
                 task.status = ClassificationTaskStatus.DONE
                 classificationSubtaskRepository.saveAll(subtasks)
             } catch (e: Exception) {
@@ -40,8 +41,9 @@ class PrintHandler(
         }
     }
 
-    // Временное решение
-    private fun storeFile(content: ByteArray) {
-        Files.write(Paths.get("result-file.xlsx"), content)
+    private fun storeFile(task: ClassificationTask, content: ByteArray): String {
+        val storageFileId = "${task.id}-result-file.xlsx"
+        fileStorageService.put(storageFileId, content)
+        return storageFileId
     }
 }

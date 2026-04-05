@@ -22,7 +22,9 @@ class ClassificationTask(
     var status: ClassificationTaskStatus = ClassificationTaskStatus.STARTED,
 
     @JdbcTypeCode(SqlTypes.JSON)
-    val meta: ClassificationTaskMeta
+    val meta: ClassificationTaskMeta,
+
+    var storageFileId: String? = null
 )
 
 enum class ClassificationTaskStatus {

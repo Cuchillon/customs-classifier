@@ -28,6 +28,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.apache.poi:poi-ooxml:5.4.1")
+    implementation(platform("software.amazon.awssdk:bom:2.28.16"))
+    implementation("software.amazon.awssdk:s3")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
