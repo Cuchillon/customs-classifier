@@ -30,6 +30,9 @@ class ClassificationTaskController(
         ClassificationTaskCreateRequest(meta, data.bytes)
     )
 
+    @GetMapping("/classify")
+    fun getAll() = classificationTaskService.getAll()
+
     @GetMapping("/classify/{id}/status")
     fun getStatus(@PathVariable("id") id: Long) = classificationTaskService.getStatus(id)
 

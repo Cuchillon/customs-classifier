@@ -13,8 +13,6 @@ import { AsyncPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TuiFieldErrorPipe, TuiPassword } from '@taiga-ui/kit';
 import { AuthService } from '../../../services/auth.service';
-import { DialogService } from '../../../services/dialog.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -38,8 +36,6 @@ import { Router } from '@angular/router';
 })
 export class Login {
   private authService = inject(AuthService);
-  private dialogService = inject(DialogService);
-  private router = inject(Router);
 
   protected readonly formGroup = new FormGroup({
     login: new FormControl<string>('', { validators: Validators.required, nonNullable: true }),

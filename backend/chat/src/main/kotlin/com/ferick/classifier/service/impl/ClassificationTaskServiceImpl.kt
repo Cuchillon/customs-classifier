@@ -2,7 +2,9 @@ package com.ferick.classifier.service.impl
 
 import com.ferick.classifier.model.dto.ClassificationTaskCreateRequest
 import com.ferick.classifier.model.dto.ClassificationTaskCreateResponse
+import com.ferick.classifier.model.dto.ClassificationTaskItem
 import com.ferick.classifier.model.dto.ClassificationTaskStatusResponse
+import com.ferick.classifier.model.dto.ClassificationTasksResponse
 import com.ferick.classifier.model.entity.ClassificationData
 import com.ferick.classifier.model.entity.ClassificationSubtask
 import com.ferick.classifier.model.entity.ClassificationTask
@@ -49,6 +51,18 @@ class ClassificationTaskServiceImpl(
 
         return ClassificationTaskCreateResponse(task.id!!)
     }
+
+    @Transactional(readOnly = true)
+    override fun getAll(): ClassificationTasksResponse =
+        classificationTaskRepository.findAll().map { task ->
+            ClassificationTaskItem(
+                id = task.id!!,
+                createdAt = task.createdAt!!,
+                status = task.status,
+                meta = task.meta,
+                storageFileId = task.storageFileId
+            )
+        }.let { ClassificationTasksResponse(it) }
 
     @Transactional(readOnly = true)
     override fun getStatus(id: Long): ClassificationTaskStatusResponse =
