@@ -1,7 +1,6 @@
 import { UserSearchRequestMeta } from './UserSearchRequestMeta';
 
-export interface UserSearchRequest {
-  query: string;
+export interface ClassificationTaskMeta {
   topK: number;
   similarityThreshold: number;
   meta?: UserSearchRequestMeta;
