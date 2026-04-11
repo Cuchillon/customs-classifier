@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS classification_tasks (
     id BIGSERIAL,
     status VARCHAR(64) NOT NULL,
     meta JSONB NOT NULL,
+    storage_file_id VARCHAR(64),
     PRIMARY KEY (id)
 );
 
